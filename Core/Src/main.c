@@ -8,14 +8,18 @@
 #include "GPIOP.h"
 TaskHandle_t task1Handle;
 TaskHandle_t task2Handle;
+TaskHandle_t task3Handle;
 QueueHandle_t QueuexHandle;
+QueueHandle_t QueueyHandle;
 void Task1(void * para1);
 void Task2(void *para2);
+void Task3(void *para3);
 uint8_t channels[2]={1,0};
 
 uint16_t adc_value[2];
 uint16_t data_receive[2];
-char str[10];
+char str1[10];
+char str2[10];
 int main(void)
 {
   ADC1_Init();
@@ -25,7 +29,9 @@ int main(void)
 	USART2_Config(9600);
 	xTaskCreate(Task1, "Task01", 128, NULL, 0, &task1Handle);
   xTaskCreate(Task2, "Task02", 128, NULL, 2, &task2Handle);
-  QueuexHandle = xQueueCreate(2,2);
+	xTaskCreate(Task3,"Task03",128,NULL,3,&task3Handle);
+  QueuexHandle = xQueueCreate(1,2);
+	QueueyHandle = xQueueCreate(1,2);
   osKernelStart();
 
 
@@ -39,7 +45,7 @@ int main(void)
 }
 
 
-void Task2 (void *para2){
+void Task1 (void *para1){
 	
 	ADC1_Read_DMA((uint32_t)&ADC1->DR, (uint32_t)adc_value, 2);
 	while(1)
@@ -47,25 +53,38 @@ void Task2 (void *para2){
 		
 	  
 		xQueueSend(QueuexHandle,&adc_value[0],NULL);
-		xQueueSend(QueuexHandle,&adc_value[1],NULL);
-		vTaskDelay(200);
+		xQueueSend(QueueyHandle,&adc_value[1],NULL);
+		vTaskDelay(100);
 	}
 }
 
-void Task1(void *para1)
+void Task2(void *para2)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   while(1)
   {
      xQueueReceive(QueuexHandle,&data_receive[0],osWaitForever);
-		 xQueueReceive(QueuexHandle,&data_receive[1],osWaitForever);
-     int len1=sprintf(str,"%4d %4d",data_receive[0],data_receive[1]);
-		 USART2_Send_String((char *)str);
+    /* code here */
+		int len1 = sprintf(str1, "%4d",data_receive[0]);
+		USART2_Send_String((char *)str1);
 
   }
   /* USER CODE END 5 */
 }
+void Task3(void *para3)
+{
+	while(1)
+	{
+		xQueueReceive(QueueyHandle,&data_receive[1],osWaitForever);
+		/*code here*/
+		int len2 = sprintf(str2, "%4d",data_receive[1]);
+		USART2_Send_String((char *)str2);
+		
+	}
+	
+}
+
 
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
