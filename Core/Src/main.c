@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 
 #include "stdio.h"
@@ -27,7 +26,7 @@ int main(void)
 	ADC1_Config_Multi(2,channels);
 	DMA_Init();
 	USART2_Init();
-	USART2_Config(9600);
+	USART2_Config(115200);
 	xTaskCreate(Task1, "Task01", 128, NULL, 0, &task1Handle);
   xTaskCreate(Task2, "Task02", 128, NULL, 2, &task2Handle);
 	xTaskCreate(Task3,"Task03",128,NULL,3,&task3Handle);
@@ -55,7 +54,7 @@ void Task1 (void *para1){
 	  
 		xQueueSend(QueuexHandle,&adc_value[0],NULL);
 		xQueueSend(QueueyHandle,&adc_value[1],NULL);
-		vTaskDelay(100);
+		vTaskDelay(1000);
 	}
 }
 
@@ -100,5 +99,3 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
   /* USER CODE END Callback 1 */
 }
-=======
->>>>>>> Develop
