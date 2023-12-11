@@ -9,6 +9,7 @@ WiFiClient wifiClient;
 PubSubClient client(wifiClient);
 int status = WL_IDLE_STATUS;
 void setup() {
+pinMode(2,OUTPUT);
 Serial.begin(115200);
 WiFi.begin(ssid, password);
 while (WiFi.status() != WL_CONNECTED) {
@@ -35,6 +36,17 @@ String payload = "{";
 payload += "\"Fire\":";payload += data.substring(0,4); payload += ",";
 payload += "\"Temp\":";payload +=data.substring(4,8);
 payload += "}";
+String tempString = data.substring(4, 8);
+ //   Convert the temperature string to an integer
+int temperature = tempString.toInt();
+if (temperature >= 3000)
+{
+  digitalWrite(2,1);
+}
+else if (temperature < 3000)
+{
+  digitalWrite(2,0);
+}    
 
 
 char attributes[1000];
@@ -64,3 +76,4 @@ delay( 500 );
 }
 }
 }
+
