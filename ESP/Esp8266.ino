@@ -10,7 +10,7 @@ PubSubClient client(wifiClient);
 int status = WL_IDLE_STATUS;
 void setup() {
 pinMode(2,OUTPUT);
-Serial.begin(115200);
+Serial.begin(9600);
 WiFi.begin(ssid, password);
 while (WiFi.status() != WL_CONNECTED) {
 delay(200);
@@ -26,24 +26,24 @@ if ( !client.connected() ) {
 reconnect();
 }
 getAndSendTemperatureAndHumidityData();
-delay(1000);
+delay(500);
 }
 void getAndSendTemperatureAndHumidityData(){
 if (Serial.available()) {
-
+//delay(1000);
 data = Serial.readString();
 String payload = "{";
 payload += "\"Fire\":";payload += data.substring(0,4); payload += ",";
 payload += "\"Temp\":";payload +=data.substring(4,8);
 payload += "}";
-String tempString = data.substring(4, 8);
+String fireString = data.substring(0, 4);
  //   Convert the temperature string to an integer
-int temperature = tempString.toInt();
-if (temperature >= 3000)
+int firet = fireString.toInt();
+if (firet >= 3000)
 {
   digitalWrite(2,1);
 }
-else if (temperature < 3000)
+else if (firet < 3000)
 {
   digitalWrite(2,0);
 }    
@@ -67,7 +67,7 @@ Serial.println("Connected to AP");
 }
 Serial.print("Connecting to ThingsBoard node ...");
 // Attempt to connect (clientId, username, password)
-if ( client.connect("ESPTESTk", TOKEN, NULL) ) {
+if ( client.connect("Pro2_test", TOKEN, NULL) ) {
 Serial.println( "[DONE]" );
 } else {
 Serial.print( "[FAILED] [ rc = " );

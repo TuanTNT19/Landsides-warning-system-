@@ -26,7 +26,9 @@ int main(void)
 	ADC1_Config_Multi(2,channels);
 	DMA_Init();
 	USART2_Init();
-	USART2_Config(115200);
+	GPIOB_Init();
+	GPIOB_Config_Pin(0,'O');
+	USART2_Config(9600);
 	xTaskCreate(Task1, "Task01", 128, NULL, 0, &task1Handle);
   xTaskCreate(Task2, "Task02", 128, NULL, 2, &task2Handle);
 	xTaskCreate(Task3,"Task03",128,NULL,3,&task3Handle);
@@ -51,10 +53,10 @@ void Task1 (void *para1){
 	while(1)
 	{
 		
-	  
+	  GPIOB_Pin_Off(0);
 		xQueueSend(QueuexHandle,&adc_value[0],NULL);
 		xQueueSend(QueueyHandle,&adc_value[1],NULL);
-		vTaskDelay(1000);
+		vTaskDelay(500);
 	}
 }
 
