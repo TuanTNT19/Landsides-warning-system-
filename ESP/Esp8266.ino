@@ -33,17 +33,17 @@ if (Serial.available()) {
 //delay(1000);
 data = Serial.readString();
 String payload = "{";
-payload += "\"Fire\":";payload += data.substring(0,4); payload += ",";
-payload += "\"Temp\":";payload +=data.substring(4,8);
+payload += "\"vibra\":";payload += data.substring(0,4); payload += ",";
+payload += "\"sohumi\":";payload +=data.substring(4,8);
 payload += "}";
-String fireString = data.substring(0, 4);
+String vibraString = data.substring(0, 4);
  //   Convert the temperature string to an integer
-int firet = fireString.toInt();
-if (firet >= 3000)
+int vib = vibraString.toInt();
+if (vib >= 300)
 {
   digitalWrite(2,1);
 }
-else if (firet < 3000)
+else if (vib < 300)
 {
   digitalWrite(2,0);
 }    
