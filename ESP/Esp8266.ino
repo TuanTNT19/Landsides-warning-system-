@@ -3,7 +3,7 @@
 String data;
 const char* ssid = "Oppo A12";
 const char* password = "oppo A12";
-#define TOKEN "gsys1z6znq1jkqrc9ke0" //Access token of device Display
+#define TOKEN "t1u2a3n4tnt19" //Access token of device Display
 char ThingsboardHost[] = "thingsboard.cloud";
 WiFiClient wifiClient;
 PubSubClient client(wifiClient);
@@ -39,11 +39,11 @@ payload += "}";
 String vibraString = data.substring(0, 4);
  //   Convert the temperature string to an integer
 int vib = vibraString.toInt();
-if (vib >= 300)
+if (vib >= 10)
 {
   digitalWrite(2,1);
 }
-else if (vib < 300)
+else if (vib < 10)
 {
   digitalWrite(2,0);
 }    
@@ -67,7 +67,7 @@ Serial.println("Connected to AP");
 }
 Serial.print("Connecting to ThingsBoard node ...");
 // Attempt to connect (clientId, username, password)
-if ( client.connect("Pro2_test", TOKEN, NULL) ) {
+if ( client.connect("ESP DA2", TOKEN, NULL) ) {
 Serial.println( "[DONE]" );
 } else {
 Serial.print( "[FAILED] [ rc = " );
@@ -76,4 +76,3 @@ delay( 500 );
 }
 }
 }
-

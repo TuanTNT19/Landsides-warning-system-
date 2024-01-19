@@ -20,6 +20,9 @@ uint16_t adc_value[2];
 uint16_t data_receive[2];
 char str1[10];
 char str2[10];
+uint16_t data0;
+uint16_t data1;
+
 int main(void)
 {
   ADC1_Init();
@@ -68,7 +71,8 @@ void Task2(void *para2)
   {
      xQueueReceive(QueuexHandle,&data_receive[0],osWaitForever);
     /* code here */
-		int len1 = sprintf(str1, "%4d",data_receive[0]);
+		data0 = data_receive[0]*99/4095;
+		int len1 = sprintf(str1, "%4d",data0);
 		USART2_Send_String((char *)str1);
 
   }
@@ -80,7 +84,8 @@ void Task3(void *para3)
 	{
 		xQueueReceive(QueueyHandle,&data_receive[1],osWaitForever);
 		/*code here*/
-		int len2 = sprintf(str2, "%4d",data_receive[1]);
+		data1 = data_receive[1]*99/4095;
+		int len2 = sprintf(str2, "%4d", data1);
 		USART2_Send_String((char *)str2);
 		
 	}
